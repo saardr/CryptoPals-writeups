@@ -1,0 +1,18 @@
+Attack plan:
+1) first, solve the last block:
+  - determine the padding size. this can be done quite easily, just switch the last byte of IV until we get a True from validation or go through all options.
+  - if we get no trues, then the padding is 1, else, the padding is not 1 and repeat for the second byte.
+  - using this way we can determine the size of the padding, which in turn allows us to discover the last bytes of the plaintext, and more importantly, 
+    through some simple XOR manipulation, also the last bytes of the AES_ECB(block, key). this in turn allows us to manipulate using IV the last bytes into anything.
+  - set the last bytes to [padding_size+1], then try to crack the 1 next byte that follows last_bytes, once cracked, use it to discover the equivalent byte of AES_ECB(block, key).
+  - repeat the steps until all blocks are discovered.
+
+2) to discover the 1 before last block:
+  - we know it has 0 padding, so we try all bytes until we get true in validation. when we get true, we know we have \x01.
+  - repeat the steps from (1) similarly.
+
+
+to solve:
+
+1. write discover_padding function, which returns the padding size.
+2. write crack_block(block, IV, padding) which follows the previously stated procedure to crack the block.
