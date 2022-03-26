@@ -1,3 +1,6 @@
+!STILL IN THE WORKS!
+
+
 Attack plan:
 1) first, solve the last block:
   - determine the padding size. this can be done quite easily, just switch the last byte of IV until we get a True from validation or go through all options.
